@@ -24,7 +24,7 @@ My way is technically the way the document has recommended us to implement *main
 ```
 
 ## Main Loop (II): Terminating all child processes with 'z' tasks
-After all tasks in the input file have been done by exiting the previous loop, the tasks will enter a second busy waiting loop whereby the main process will send termination signals to all child processes using the 'z' task that are still alive. Those that got prematurely terminated get revived in the previous busy wait loop therefore all child processes should be alive again before entering the second loop. Check from the for loop if any child processes are still alive, if their task status is zero, update its task status to 1 and post the 'z' task to it. Update the termination number and once the termination number equals the number of processes first called, *main_loop()* can exit the second loop. My psuedocode below will explain it a bit more in depth.
+After all tasks in the input file have been done by exiting the previous loop, the tasks will enter a second busy waiting loop whereby the main process will send termination signals to all child processes using the 'z' task that are still alive. Those that got prematurely terminated may get revived in the previous busy wait loop before entering the second loop. Check from the for loop if any child processes are still alive, if their task status is zero, update its task status to 1 and post the 'z' task to it. Then update the termination number. If a child process is not alive, meaning it has been terminate, also update the termination number. Once this termination number equals the number of processes first called, it means all worker processes should be terminated by then and hence *main_loop()* can exit the second loop. My psuedocode below will explain it a bit more in depth.
 
 ### Pseudocode
 ```
@@ -37,6 +37,8 @@ After all tasks in the input file have been done by exiting the previous loop, t
 7                   update child process[i]'s job buffer with a 'z' task
 8                   notify child process[i] with sem_post
 9                   update termination number
-10      if termination number == number of processes
-11          break
+10          else
+11              update termination number
+12      if termination number == number of processes
+13          break
 ```
