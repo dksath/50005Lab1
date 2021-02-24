@@ -19,7 +19,6 @@ My way is technically the way the document has recommended us to implement *main
 10              update child process[i]'s job buffer with a new task
 11              notify child process i with sem_post
 12              indicate doing_task when job is dispatched
-
 13      if at any point doing_task is being indicated when a job is dispatched 
 14          break   
 ```
